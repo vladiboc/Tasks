@@ -1,0 +1,13 @@
+server:
+  port: 8080
+
+springdoc:
+  swagger-ui:
+    path: /swagger
+
+spring:
+  main:
+    web-application-type: reactive
+  data:
+    mongodb:
+      uri: mongodb://root:password@localhost:27017/appdb?authSource=admin
