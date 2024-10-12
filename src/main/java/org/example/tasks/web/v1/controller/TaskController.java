@@ -23,6 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Контроллер управления задачами.
+ */
 @RestController
 @RequestMapping("/api/v1/tasks")
 @Loggable
@@ -57,7 +60,7 @@ public class TaskController {
 
   @PutMapping("/{id}")
   public Mono<ResponseEntity<TaskResponse>> update(
-    @PathVariable @UuidValid final String id, @RequestBody @Valid final TaskUpsertRequest request
+      @PathVariable @UuidValid final String id, @RequestBody @Valid final TaskUpsertRequest request
   ) {
     return this.taskService.update(id, this.taskMapper.requestToTask(request))
         .map(this.taskMapper::taskToTaskResponse)

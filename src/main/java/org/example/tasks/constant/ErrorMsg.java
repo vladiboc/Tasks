@@ -2,6 +2,9 @@ package org.example.tasks.constant;
 
 import lombok.experimental.UtilityClass;
 
+/**
+ * Константы - строки сообщений об ошибках.
+ */
 @UtilityClass
 public class ErrorMsg {
   public static final String USER_NOT_FOUND = "Не найден пользователь с id: {0}!";

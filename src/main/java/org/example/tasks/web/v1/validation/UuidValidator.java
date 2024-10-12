@@ -5,6 +5,9 @@ import jakarta.validation.ConstraintValidatorContext;
 import java.util.Objects;
 import org.example.tasks.aop.Loggable;
 
+/**
+ * Проверяет строку на соответсвие регулярному выражению для UUID.
+ */
 @Loggable
 public class UuidValidator implements ConstraintValidator<UuidValid, String> {
   private static final String UUID =
@@ -13,8 +16,8 @@ public class UuidValidator implements ConstraintValidator<UuidValid, String> {
 
   @Override
   public void initialize(UuidValid annotation) {
-      this.nullable = annotation.nullable();
-    }
+    this.nullable = annotation.nullable();
+  }
 
   @Override
   public boolean isValid(String checkedValue, ConstraintValidatorContext context) {

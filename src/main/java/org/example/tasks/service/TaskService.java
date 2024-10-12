@@ -5,6 +5,9 @@ import org.springframework.data.domain.Range;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Контракт сервиса задач.
+ */
 public interface TaskService {
   Flux<Task> findAll();
 

@@ -5,6 +5,9 @@ import java.util.Set;
 import org.example.tasks.dao.entity.TaskStatus;
 import org.example.tasks.dao.entity.User;
 
+/**
+ * Объект "задача" для ответа пользователю.
+ */
 public record TaskResponse(
     String id,
     String name,

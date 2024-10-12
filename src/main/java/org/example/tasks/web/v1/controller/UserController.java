@@ -23,7 +23,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
- * Контроллер для сервиса пользователей.
+ * Контроллер управлнеия пользователями.
  */
 @RestController
 @RequestMapping("/api/v1/users")

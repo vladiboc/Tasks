@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.support.WebExchangeBindException;
 import reactor.core.publisher.Mono;
 
+/**
+ * Контроллер обработки всех возникающих ошибок.
+ * Отправляет пользователю соответсвующий ошибке код вазврата и сообщение.
+ */
 @Loggable
 @Slf4j
 @RestControllerAdvice

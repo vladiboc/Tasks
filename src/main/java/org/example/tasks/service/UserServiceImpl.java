@@ -1,5 +1,6 @@
 package org.example.tasks.service;
 
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.example.tasks.aop.Loggable;
 import org.example.tasks.dao.entity.User;
@@ -10,8 +11,9 @@ import org.springframework.util.StringUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.UUID;
-
+/**
+ * Реализация сервиса пользователей.
+ */
 @Loggable
 @Service
 @RequiredArgsConstructor

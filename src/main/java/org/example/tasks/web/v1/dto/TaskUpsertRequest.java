@@ -7,6 +7,9 @@ import org.example.tasks.dao.entity.TaskStatus;
 import org.example.tasks.web.v1.validation.EnumValid;
 import org.example.tasks.web.v1.validation.UuidValid;
 
+/**
+ * Объект запроса от пользователя для создания/изменения задачи.
+ */
 public record TaskUpsertRequest(
     @NotBlank(message = ErrorMsg.CANNOT_BE_BLANK)
     String name,

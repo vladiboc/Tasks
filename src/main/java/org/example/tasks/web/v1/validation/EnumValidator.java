@@ -6,6 +6,9 @@ import java.util.Arrays;
 import java.util.Objects;
 import org.example.tasks.aop.Loggable;
 
+/**
+ * Проверяет строку на соответствие элементу перечисления.
+ */
 @Loggable
 public class EnumValidator implements ConstraintValidator<EnumValid, String> {
   private Class<?> enumClass;

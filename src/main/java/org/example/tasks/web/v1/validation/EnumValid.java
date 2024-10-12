@@ -10,6 +10,9 @@ import java.lang.annotation.Target;
 import org.example.tasks.constant.ErrorMsg;
 
 
+/**
+ * Аннотация для проверки строки на соответствие элементу перечисления.
+ */
 @Documented
 @Constraint(validatedBy = EnumValidator.class)
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})

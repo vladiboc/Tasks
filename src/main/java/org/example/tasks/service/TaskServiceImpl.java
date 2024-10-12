@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Реклизация сервиса задач.
+ */
 @Service
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
@@ -95,7 +98,7 @@ public class TaskServiceImpl implements TaskService {
     return taskMono.flatMap(task -> {
       task.getObserverIds().add(observerId);
       return taskRepository.save(task).flatMap(savedTask -> this.findById(savedTask.getId()));
-     });
+    });
   }
 
   @Override

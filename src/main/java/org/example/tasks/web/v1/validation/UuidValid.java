@@ -9,6 +9,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import org.example.tasks.constant.ErrorMsg;
 
+/**
+ * Аннотация для валидации строки на соответсвие регулярному выражению UUID.
+ */
 @Documented
 @Constraint(validatedBy = UuidValidator.class)
 @Target({ElementType.TYPE_USE, ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER })

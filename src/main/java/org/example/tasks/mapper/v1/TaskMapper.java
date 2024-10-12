@@ -6,6 +6,9 @@ import org.example.tasks.web.v1.dto.TaskUpsertRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
+/**
+ * Преобразования между сущностью Task и ДТО.
+ */
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface TaskMapper {
   TaskResponse taskToTaskResponse(Task task);
