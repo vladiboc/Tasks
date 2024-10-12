@@ -58,7 +58,6 @@ public class TaskServiceImpl implements TaskService {
   @Override
   public Mono<Task> create(final Task newTask) {
     newTask.setId(UUID.randomUUID().toString());
-    newTask.setStatus(TaskStatus.TODO);
     final var now = Instant.now();
     newTask.setCreatedAt(now);
     newTask.setUpdatedAt(now);

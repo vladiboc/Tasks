@@ -1,13 +1,16 @@
 package org.example.tasks.web.v1.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.tasks.aop.Loggable;
 import org.example.tasks.mapper.v1.TaskMapper;
 import org.example.tasks.service.TaskService;
 import org.example.tasks.web.v1.dto.TaskResponse;
 import org.example.tasks.web.v1.dto.TaskUpsertRequest;
+import org.example.tasks.web.v1.validation.UuidValid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -20,9 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@Loggable
 @RestController
 @RequestMapping("/api/v1/tasks")
+@Loggable
+@Validated
 @RequiredArgsConstructor
 @Tag(name = "Сервис задач", description = "CRUD сервис управления задачами.")
 public class TaskController {
@@ -35,7 +39,7 @@ public class TaskController {
   }
 
   @GetMapping("/{id}")
-  public Mono<ResponseEntity<TaskResponse>> findById(@PathVariable final String id) {
+  public Mono<ResponseEntity<TaskResponse>> findById(@PathVariable @UuidValid final String id) {
     return this.taskService.findById(id)
         .map(this.taskMapper::taskToTaskResponse)
         .map(ResponseEntity::ok)
@@ -43,7 +47,9 @@ public class TaskController {
   }
 
   @PostMapping
-  public Mono<ResponseEntity<TaskResponse>> create(@RequestBody final TaskUpsertRequest request) {
+  public Mono<ResponseEntity<TaskResponse>> create(
+      @RequestBody @Valid final TaskUpsertRequest request
+  ) {
     return this.taskService.create(this.taskMapper.requestToTask(request))
         .map(this.taskMapper::taskToTaskResponse)
         .map(ResponseEntity::ok);
@@ -51,7 +57,7 @@ public class TaskController {
 
   @PutMapping("/{id}")
   public Mono<ResponseEntity<TaskResponse>> update(
-    @PathVariable final String id, @RequestBody final TaskUpsertRequest request
+    @PathVariable @UuidValid final String id, @RequestBody @Valid final TaskUpsertRequest request
   ) {
     return this.taskService.update(id, this.taskMapper.requestToTask(request))
         .map(this.taskMapper::taskToTaskResponse)
@@ -61,7 +67,7 @@ public class TaskController {
 
   @PatchMapping("/{taskId}/{observerId}")
   public Mono<ResponseEntity<TaskResponse>> addObserver(
-      @PathVariable final String taskId, @PathVariable final String observerId
+      @PathVariable @UuidValid final String taskId, @PathVariable @UuidValid final String observerId
   ) {
     return this.taskService.addObserver(taskId, observerId)
         .map(this.taskMapper::taskToTaskResponse)
@@ -70,7 +76,7 @@ public class TaskController {
   }
 
   @DeleteMapping("/{id}")
-  public Mono<ResponseEntity<Void>> deleteById(@PathVariable final String id) {
+  public Mono<ResponseEntity<Void>> deleteById(@PathVariable @UuidValid final String id) {
     return this.taskService.deleteById(id).then(Mono.just(ResponseEntity.noContent().build()));
   }
 }
