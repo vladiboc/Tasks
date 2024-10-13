@@ -9,6 +9,7 @@ import org.example.tasks.service.UserService;
 import org.example.tasks.web.v1.dto.UserResponse;
 import org.example.tasks.web.v1.dto.UserUpsertRequest;
 import org.example.tasks.web.v1.validation.UuidValid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -55,7 +56,7 @@ public class UserController {
   ) {
     return this.userService.create(this.userMapper.requstToUser(request))
         .map(this.userMapper::userToResponse)
-        .map(ResponseEntity::ok);
+        .map(userResponse -> ResponseEntity.status(HttpStatus.CREATED).body(userResponse));
   }
 
   @PutMapping("/{id}")
