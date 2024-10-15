@@ -9,6 +9,7 @@ import org.example.tasks.service.TaskService;
 import org.example.tasks.web.v1.dto.TaskResponse;
 import org.example.tasks.web.v1.dto.TaskUpsertRequest;
 import org.example.tasks.web.v1.validation.UuidValid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -55,7 +56,7 @@ public class TaskController {
   ) {
     return this.taskService.create(this.taskMapper.requestToTask(request))
         .map(this.taskMapper::taskToTaskResponse)
-        .map(ResponseEntity::ok);
+        .map(taskResponse -> ResponseEntity.status(HttpStatus.CREATED).body(taskResponse));
   }
 
   @PutMapping("/{id}")

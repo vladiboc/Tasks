@@ -1,7 +1,6 @@
 package org.example.tasks.web.v1.controller;
 
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import org.example.tasks.AbstractTest;
 import org.example.tasks.web.v1.dto.UserResponse;
 import org.example.tasks.web.v1.dto.UserUpsertRequest;
@@ -43,8 +42,8 @@ class UserControllerTest extends AbstractTest {
         .expectNext(3L)
         .expectComplete()
         .verify();
-    final var expectedData = new UserResponse(USER_NEW_ID, "Педро", "pedro@mail.mx");
     final var requestedUser = new UserUpsertRequest("Педро", "pedro@mail.mx");
+    final var expectedData = new UserResponse(USER_NEW_ID, "Педро", "pedro@mail.mx");
     this.webTestClient.post().uri("/api/v1/users")
         .body(Mono.just(requestedUser), UserUpsertRequest.class)
         .exchange()

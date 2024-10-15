@@ -67,10 +67,12 @@ public class TaskServiceImpl implements TaskService {
     return Mono.zip(
         Mono.just(newTask),
         this.userService.findById(newTask.getAuthorId()),
-        this.userService.findById(newTask.getAssigneeId())
+        this.userService.findById(newTask.getAssigneeId()),
+        this.userService.findAllById(newTask.getObserverIds()).collect(Collectors.toSet())
     ).flatMap(tuple -> {
       tuple.getT1().setAuthor(tuple.getT2());
       tuple.getT1().setAssignee(tuple.getT3());
+      tuple.getT1().setObservers(tuple.getT4());
       return this.taskRepository.save(tuple.getT1());
     });
   }

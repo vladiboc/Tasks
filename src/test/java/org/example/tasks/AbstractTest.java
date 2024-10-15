@@ -31,6 +31,8 @@ public abstract class AbstractTest {
   protected static final String USER_NEW_ID = UUID.randomUUID().toString();
   protected static final String TASK_FIRST_ID = UUID.randomUUID().toString();
   protected static final String TASK_SECOND_ID = UUID.randomUUID().toString();
+  protected static final Instant CREATED_AT = Instant.now();
+  protected static final Instant UPDATED_AT = Instant.now();
 
   @Container
   static final MongoDBContainer MONGODB_CONTAINER = new MongoDBContainer("mongo:6.0.8")
@@ -58,12 +60,12 @@ public abstract class AbstractTest {
     this.userRepository.saveAll(List.of(juan, pedro, julio)).collectList().block();
     this.taskRepository.saveAll(List.of(
         new Task(TASK_FIRST_ID, "Приготовить буррито", "Приготовить буррито с соусом сальса",
-            Instant.now(), Instant.now(), TaskStatus.TODO,
+            CREATED_AT, UPDATED_AT, TaskStatus.TODO,
             USER_JUAN_ID, USER_PEDRO_ID, Set.of(USER_JULIO_ID),
             juan, pedro, Set.of(julio)
         ),
-        new Task(TASK_FIRST_ID, "Съесть буррито", "Скушать полностью буррито с соусом сальса",
-            Instant.now(), Instant.now(), TaskStatus.TODO,
+        new Task(TASK_SECOND_ID, "Съесть буррито", "Скушать полностью буррито с соусом сальса",
+            CREATED_AT, UPDATED_AT, TaskStatus.TODO,
             USER_PEDRO_ID, USER_JUAN_ID, Set.of(USER_JULIO_ID),
             pedro, juan, Set.of(julio)
         )
