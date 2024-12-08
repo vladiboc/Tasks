@@ -5,21 +5,24 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import org.example.tasks.AbstractTest;
+import org.example.tasks.dao.entity.RoleType;
 import org.example.tasks.dao.entity.TaskStatus;
 import org.example.tasks.dao.entity.User;
 import org.example.tasks.web.v1.dto.TaskResponse;
 import org.example.tasks.web.v1.dto.TaskUpsertRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.test.context.support.WithMockUser;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 class TaskControllerTest extends AbstractTest {
-  private final User juan = new User(USER_JUAN_ID, "Хуан", "juan@mail.mx");
-  private final User pedro = new User(USER_PEDRO_ID, "Педро", "pedro@mail.mx");
-  private final User julio = new User(USER_JULIO_ID, "Хулио", "julio@mail.mx");
+  private final User juan = new User(USER_JUAN_ID, "Хуан", "juan@mail.mx", "juan", Set.of(RoleType.ROLE_USER));
+  private final User pedro = new User(USER_PEDRO_ID, "Педро", "pedro@mail.mx", "pedro", Set.of(RoleType.ROLE_USER));
+  private final User julio = new User(USER_JULIO_ID, "Хулио", "julio@mail.mx", "julio", Set.of(RoleType.ROLE_MANAGER));
 
   @Test
+  @WithMockUser(username = "user", roles = {"USER"})
   void whenGetAllTasks_thenReturnAllTasksFromDB() {
     final var expectedData = List.of(
         new TaskResponse(TASK_FIRST_ID, "Приготовить буррито", "Приготовить буррито с соусом сальса",
@@ -38,6 +41,7 @@ class TaskControllerTest extends AbstractTest {
   }
 
   @Test
+  @WithMockUser(username = "user", roles = {"USER"})
   void whenGetById_thenReturnTaskById() {
     final var expectedData = new TaskResponse(
         TASK_FIRST_ID, "Приготовить буррито", "Приготовить буррито с соусом сальса",
@@ -51,6 +55,7 @@ class TaskControllerTest extends AbstractTest {
   }
 
   @Test
+  @WithMockUser(username = "manager", roles = {"MANAGER"})
   void whenCreateTask_thenReturnNewTask() {
     StepVerifier.create(taskRepository.count())
         .expectNext(2L)
@@ -89,6 +94,7 @@ class TaskControllerTest extends AbstractTest {
   }
 
   @Test
+  @WithMockUser(username = "manager", roles = {"MANAGER"})
   void whenUpdateTask_thenReturnNewTask() {
     final var requestedTask = new TaskUpsertRequest(
        "Съесть буррито", "Скушать буррито очень быстро.",
@@ -121,6 +127,7 @@ class TaskControllerTest extends AbstractTest {
   }
 
   @Test
+  @WithMockUser(username = "manager", roles = {"MANAGER"})
   void whenDeleteTaskById_thenDeleteTaskFromDb() {
     this.webTestClient.delete().uri("/api/v1/tasks/{id}", TASK_SECOND_ID)
         .exchange()

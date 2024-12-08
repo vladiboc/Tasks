@@ -1,6 +1,7 @@
 package org.example.tasks.security;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.example.tasks.dao.entity.User;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,7 +16,7 @@ public class AppUserPrincipal implements UserDetails {
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return user.getRoles().stream()
         .map(roleType -> new SimpleGrantedAuthority(roleType.name()))
-        .toList();
+        .collect(Collectors.toSet());
   }
 
   @Override

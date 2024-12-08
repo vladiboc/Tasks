@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import org.example.tasks.dao.entity.RoleType;
 import org.example.tasks.dao.entity.Task;
 import org.example.tasks.dao.entity.TaskStatus;
 import org.example.tasks.dao.entity.User;
@@ -54,9 +55,9 @@ public abstract class AbstractTest {
 
   @BeforeEach
   protected void setup() {
-    final var juan = new User(USER_JUAN_ID, "Хуан", "juan@mail.mx");
-    final var pedro = new User(USER_PEDRO_ID, "Педро", "pedro@mail.mx");
-    final var julio = new User(USER_JULIO_ID, "Хулио", "julio@mail.mx");
+    final var juan = new User(USER_JUAN_ID, "Хуан", "juan@mail.mx", "juan", Set.of(RoleType.ROLE_USER));
+    final var pedro = new User(USER_PEDRO_ID, "Педро", "pedro@mail.mx", "pedro", Set.of((RoleType.ROLE_USER)));
+    final var julio = new User(USER_JULIO_ID, "Хулио", "julio@mail.mx", "julio", Set.of(RoleType.ROLE_MANAGER));
     this.userRepository.saveAll(List.of(juan, pedro, julio)).collectList().block();
     this.taskRepository.saveAll(List.of(
         new Task(TASK_FIRST_ID, "Приготовить буррито", "Приготовить буррито с соусом сальса",
