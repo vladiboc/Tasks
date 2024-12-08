@@ -1,5 +1,7 @@
 package org.example.tasks.web.v1.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +13,7 @@ import org.example.tasks.web.v1.dto.TaskUpsertRequest;
 import org.example.tasks.web.v1.validation.UuidValid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,11 +40,13 @@ public class TaskController {
   private final TaskService taskService;
   private final TaskMapper taskMapper;
 
+  @Operation(security = @SecurityRequirement(name = "basicAuth"))
   @GetMapping
   public Flux<TaskResponse> findAll() {
     return this.taskService.findAll().map(this.taskMapper::taskToTaskResponse);
   }
 
+  @Operation(security = @SecurityRequirement(name = "basicAuth"))
   @GetMapping("/{id}")
   public Mono<ResponseEntity<TaskResponse>> findById(@PathVariable @UuidValid final String id) {
     return this.taskService.findById(id)
@@ -50,7 +55,9 @@ public class TaskController {
         .defaultIfEmpty(ResponseEntity.notFound().build());
   }
 
+  @Operation(security = @SecurityRequirement(name = "basicAuth"))
   @PostMapping
+  @PreAuthorize("hasAnyRole('MANAGER')")
   public Mono<ResponseEntity<TaskResponse>> create(
       @RequestBody @Valid final TaskUpsertRequest request
   ) {
@@ -59,7 +66,9 @@ public class TaskController {
         .map(taskResponse -> ResponseEntity.status(HttpStatus.CREATED).body(taskResponse));
   }
 
+  @Operation(security = @SecurityRequirement(name = "basicAuth"))
   @PutMapping("/{id}")
+  @PreAuthorize("hasAnyRole('MANAGER')")
   public Mono<ResponseEntity<TaskResponse>> update(
       @PathVariable @UuidValid final String id, @RequestBody @Valid final TaskUpsertRequest request
   ) {
@@ -69,6 +78,7 @@ public class TaskController {
         .defaultIfEmpty(ResponseEntity.notFound().build());
   }
 
+  @Operation(security = @SecurityRequirement(name = "basicAuth"))
   @PatchMapping("/{taskId}/{observerId}")
   public Mono<ResponseEntity<TaskResponse>> addObserver(
       @PathVariable @UuidValid final String taskId, @PathVariable @UuidValid final String observerId
@@ -79,7 +89,9 @@ public class TaskController {
         .defaultIfEmpty(ResponseEntity.notFound().build());
   }
 
+  @Operation(security = @SecurityRequirement(name = "basicAuth"))
   @DeleteMapping("/{id}")
+  @PreAuthorize("hasAnyRole('MANAGER')")
   public Mono<ResponseEntity<Void>> deleteById(@PathVariable @UuidValid final String id) {
     return this.taskService.deleteById(id).then(Mono.just(ResponseEntity.noContent().build()));
   }

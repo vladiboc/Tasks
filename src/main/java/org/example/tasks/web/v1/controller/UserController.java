@@ -1,5 +1,7 @@
 package org.example.tasks.web.v1.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -36,12 +38,14 @@ public class UserController {
   private final UserService userService;
   private final UserMapper userMapper;
 
+  @Operation(security = @SecurityRequirement(name = "basicAuth"))
   @GetMapping
   public Flux<UserResponse> getAllUsers() {
     return this.userService.findAll()
         .map(this.userMapper::userToResponse);
   }
 
+  @Operation(security = @SecurityRequirement(name = "basicAuth"))
   @GetMapping("/{id}")
   public Mono<ResponseEntity<UserResponse>> getById(@PathVariable @UuidValid final String id) {
     final var monoUser = this.userService.findById(id);
@@ -59,6 +63,7 @@ public class UserController {
         .map(userResponse -> ResponseEntity.status(HttpStatus.CREATED).body(userResponse));
   }
 
+  @Operation(security = @SecurityRequirement(name = "basicAuth"))
   @PutMapping("/{id}")
   public Mono<ResponseEntity<UserResponse>> update(
       @PathVariable @UuidValid final String id,
@@ -70,6 +75,7 @@ public class UserController {
         .defaultIfEmpty(ResponseEntity.notFound().build());
   }
 
+  @Operation(security = @SecurityRequirement(name = "basicAuth"))
   @DeleteMapping("/{id}")
   public Mono<ResponseEntity<Void>> deleteById(@PathVariable @UuidValid final String id) {
     return this.userService.deleteById(id).then(Mono.just(ResponseEntity.noContent().build()));

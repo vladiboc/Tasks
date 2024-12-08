@@ -1,6 +1,8 @@
 package org.example.tasks.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
@@ -16,6 +18,11 @@ import org.springframework.context.annotation.Configuration;
     servers = {
         @io.swagger.v3.oas.annotations.servers.Server(url = "/", description = "Default Server URL")
     }
+)
+@SecurityScheme(
+    name = "basicAuth",
+    type = SecuritySchemeType.HTTP,
+    scheme = "basic"
 )
 public class OpenApiConfig {
   @Bean

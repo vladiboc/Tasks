@@ -12,6 +12,8 @@ public interface UserService {
 
   Mono<User> findById(String id);
 
+  Mono<User> findByName(String userName);
+
   Flux<User> findAllById(Iterable<String> ids);
 
   Mono<User> create(User user);

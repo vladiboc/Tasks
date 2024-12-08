@@ -16,5 +16,5 @@ public class ErrorMsg {
   public static final String WEB_EXCHANGE_ERROR = "Ошибка Веб-обмена!";
   public static final String FIELD_ERROR = "Поле: {0} Ошибка: {1}";
   public static final String CANNOT_BE_BLANK = "Не может быть пустым!";
-  public static final String WRONG_ENUM = "Некорректное занчение перечисления!";
+  public static final String WRONG_ENUM = "Некорректное значение перечисления!";
 }

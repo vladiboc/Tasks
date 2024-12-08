@@ -1,11 +1,13 @@
 package org.example.tasks.service;
 
+import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.example.tasks.aop.Loggable;
 import org.example.tasks.dao.entity.User;
 import org.example.tasks.dao.repository.UserRepository;
 import org.example.tasks.exception.UserNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import reactor.core.publisher.Flux;
@@ -19,6 +21,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
   private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
 
   @Override
   public Flux<User> findAll() {
@@ -32,6 +35,12 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  public Mono<User> findByName(final String userName) {
+    return this.userRepository.findByName(userName)
+        .switchIfEmpty(Mono.error(new UserNotFoundException(userName)));
+  }
+
+  @Override
   public Flux<User> findAllById(Iterable<String> ids) {
     return this.userRepository.findAllById(ids);
   }
@@ -39,6 +48,7 @@ public class UserServiceImpl implements UserService {
   @Override
   public Mono<User> create(final User user) {
     user.setId(UUID.randomUUID().toString());
+    user.setPassword(this.passwordEncoder.encode(user.getPassword()));
     return this.userRepository.save(user);
   }
 
@@ -50,6 +60,12 @@ public class UserServiceImpl implements UserService {
       }
       if (StringUtils.hasText(user.getEmail())) {
         updatedUser.setEmail(user.getEmail());
+      }
+      if (StringUtils.hasText(user.getPassword())) {
+        updatedUser.setPassword(this.passwordEncoder.encode(user.getPassword()));
+      }
+      if (Objects.nonNull(user.getRoles())) {
+        updatedUser.setRoles(user.getRoles());
       }
       return this.userRepository.save(updatedUser);
     });
